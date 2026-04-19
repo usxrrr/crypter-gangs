@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRYPTER • DOSSIERS GANGS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        :root {--green:#00ff41;--dark:#0a0a0a;--darker:#000000;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--darker);color:var(--green);font-family:'VT323',monospace;font-size:18px;overflow:hidden;}
+        .scanline{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(to bottom,transparent 50%,rgba(0,255,65,.03)50%);background-size:100% 4px;pointer-events:none;animation:scan 4s linear infinite;z-index:9999;}
+        @keyframes scan{0%{background-position:0 0}100%{background-position:0 100%}}
+        .header{background:#111;border-bottom:3px solid var(--green);padding:15px 30px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 0 20px var(--green);}
+        .header h1{font-size:32px;letter-spacing:4px;text-shadow:0 0 10px var(--green);animation:glitch 1s infinite alternate;}
+        .status{font-size:16px;color:#00ff41;display:flex;align-items:center;gap:10px;}
+        .status::before{content:'';display:inline-block;width:12px;height:12px;background:#00ff41;border-radius:50%;animation:blink 1s infinite;}
+        .container{display:flex;height:calc(100vh - 80px);}
+        .sidebar{width:280px;background:#111;border-right:3px solid var(--green);padding:20px;overflow-y:auto;}
+        .main{flex:1;padding:30px;overflow-y:auto;}
+        .card{background:#111;border:2px solid var(--green);padding:20px;margin-bottom:20px;box-shadow:0 0 15px var(--green);}
+        input,select,textarea,button{font-family:'VT323',monospace;font-size:18px;background:#000;border:2px solid var(--green);color:var(--green);padding:10px;width:100%;margin-bottom:15px;}
+        button{cursor:pointer;transition:all .2s;}
+        button:hover{background:var(--green);color:#000;box-shadow:0 0 20px var(--green);}
+        .gang-btn{display:inline-block;padding:8px 15px;margin:5px;border:2px solid var(--green);background:#111;cursor:pointer;}
+        .gang-btn.active{background:var(--green);color:#000;}
+        .dossier{border:2px solid #222;padding:15px;margin:10px 0;background:#0a0a0a;}
+        .ROUGE{background:#ff0000;color:#fff;}.BLEU{background:#0000ff;color:#fff;}.VERT{background:#00ff00;color:#000;}
+        .NOIR{background:#111;color:#fff;border:2px solid #fff;}.JAUNE{background:#ffff00;color:#000;}.BLANC{background:#fff;color:#000;}
+        .note{background:#000;border-left:4px solid var(--green);padding:10px;margin:8px 0;font-size:16px;}
+        .terminal{background:#000;border:2px solid var(--green);padding:15px;height:300px;overflow-y:auto;font-size:16px;line-height:1.4;white-space:pre-wrap;}
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="header">
+        <h1>CRYPTER • DOSSIERS GANGS</h1>
+        <div class="status">SYSTÈME EN LIGNE • CONNEXION CRYPTÉE • 100%</div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <h2>📂 GANGS PAR COULEUR</h2>
+            <div id="gang-list"></div>
+            <div style="margin-top:40px;border-top:2px solid #00ff41;padding-top:15px;">
+                <h3>🔍 RECHERCHE RAPIDE</h3>
+                <input type="text" id="search" placeholder="Nom suspect..." onkeyup="if(event.key==='Enter') searchSuspect()">
+                <button onclick="searchSuspect()">LANCER RECHERCHE</button>
+            </div>
+        </div>
+        <div class="main">
+            <div class="card">
+                <h2>➕ NOUVEAU SUSPECT</h2>
+                <input type="text" id="nom" placeholder="NOM COMPLET DU SUSPECT">
+                <p style="margin:10px 0 5px 0;">COULEUR DE TENUE / GANG :</p>
+                <div id="color-select"></div>
+                <textarea id="notes" rows="4" placeholder="NOTES SUR CE QUI A ÉTÉ FAIT..."></textarea>
+                <button onclick="ajouterSuspect()" style="font-size:22px;padding:15px;">ENREGISTRER DOSSIER CRYPTÉ</button>
+            </div>
+            <div class="card">
+                <h2 style="display:flex;justify-content:space-between;">📋 DOSSIERS EXISTANTS <button onclick="rafraichirListe()" style="width:auto;padding:8px 20px;font-size:16px;">↻ ACTUALISER</button></h2>
+                <div id="liste-dossiers" class="terminal"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GANGS = {"ROUGE":"Bloods / Piru","BLEU":"Crips","VERT":"Latin Kings etc.","NOIR":"MS-13 / Black","JAUNE":"Gang asiatique","BLANC":"White gang","AUTRE":"Autre"};
+        let currentColor = null;
+        function init(){const c=document.getElementById('color-select');Object.keys(GANGS).forEach(code=>{const btn=document.createElement('div');btn.className=`gang-btn ${code}`;btn.textContent=code;btn.onclick=()=>{document.querySelectorAll('.gang-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentColor=code;};c.appendChild(btn);});rafraichirListe();}
+        function ajouterSuspect(){const nom=document.getElementById('nom').value.trim().toUpperCase();const notes=document.getElementById('notes').value.trim();if(!nom){alert("❌ NOM OBLIGATOIRE");return;}if(!currentColor){alert("❌ CHOISIS UNE COULEUR");return;}let d=JSON.parse(localStorage.getItem('dossiers_gangs')||'{}');if(!d[currentColor])d[currentColor]={};if(!d[currentColor][nom])d[currentColor][nom]=[];d[currentColor][nom].push({date:new Date().toLocaleString('fr-FR'),action:notes||"(sans note)"});localStorage.setItem('dossiers_gangs',JSON.stringify(d));document.getElementById('nom').value='';document.getElementById('notes').value='';currentColor=null;document.querySelectorAll('.gang-btn').forEach(b=>b.classList.remove('active'));alert(`✅ DOSSIER ${currentColor} / ${nom} CRYPTÉ`);rafraichirListe();}
+        function rafraichirListe(){const container=document.getElementById('liste-dossiers');let dossiers=JSON.parse(localStorage.getItem('dossiers_gangs')||'{}');let html='';if(Object.keys(dossiers).length===0){html='Aucun dossier pour l’instant…';}else{Object.keys(dossiers).sort().forEach(g=>{html+=`🟥 GANG ${g} (${GANGS[g]||'Inconnu'})\n`+'─'.repeat(50)+'\n';Object.keys(dossiers[g]).forEach(n=>{html+=`👤 ${n}\n`;dossiers[g][n].forEach(note=>{html+=`   [${note.date}] → ${note.action}\n`;});html+='\n';});});}container.innerHTML=`<pre>${html}</pre>`;}
+        function searchSuspect(){const term=document.getElementById('search').value.trim().toUpperCase();if(!term)return rafraichirListe();let dossiers=JSON.parse(localStorage.getItem('dossiers_gangs')||'{}');let html=`RECHERCHE : "${term}"\n\n`;let found=false;Object.keys(dossiers).forEach(g=>{Object.keys(dossiers[g]).forEach(n=>{if(n.includes(term)){found=true;html+=`🟥 ${g} → ${n}\n`;dossiers[g][n].forEach(note=>{html+=`   [${note.date}] → ${note.action}\n`;});html+='\n';}})});if(!found)html+='Aucun résultat.';document.getElementById('liste-dossiers').innerHTML=`<pre>${html}</pre>`;}
+        window.onload=init;
+    </script>
+</body>
+</html>
