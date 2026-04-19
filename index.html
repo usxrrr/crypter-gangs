@@ -36,13 +36,10 @@
         
         /* LOGIN */
         #login-screen {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             background: var(--darker);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             z-index: 10000;
         }
         .login-box {
@@ -144,7 +141,7 @@
             white-space: pre-wrap;
         }
         
-        /* MODAL */
+        /* MODAL AMÉLIORÉ */
         #modal {
             position: fixed;
             top: 0; left: 0;
@@ -158,9 +155,9 @@
         .modal-content {
             background: #111;
             border: 4px solid var(--green);
-            width: 90%;
-            max-width: 850px;
-            max-height: 90vh;
+            width: 92%;
+            max-width: 950px;
+            max-height: 94vh;
             overflow-y: auto;
             padding: 25px;
         }
@@ -177,25 +174,39 @@
             cursor: pointer;
         }
         
-        .delete-btn {
-            background: #300;
-            border: 3px solid #f00;
-            color: #f00;
-            padding: 12px 25px;
-            font-size: 20px;
-        }
-        .export-btn {
-            background: #003300;
-            border: 3px solid #0f0;
-            color: #0f0;
+        .note-entry {
+            background: #0a0a0a;
+            border: 2px solid #222;
+            padding: 18px;
+            margin-bottom: 20px;
+            border-radius: 0;
         }
         
-        .ROUGE { background:#ff0000; color:#fff; }
-        .BLEU { background:#0000ff; color:#fff; }
-        .VERT { background:#00ff00; color:#000; }
-        .NOIR { background:#111; color:#fff; border:2px solid #fff; }
-        .JAUNE { background:#ffff00; color:#000; }
-        .BLANC { background:#fff; color:#000; }
+        .edit-zone {
+            background: #111;
+            border: 3px solid #00ff41;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .edit-btn, .delete-btn, .export-btn {
+            padding: 8px 20px;
+            font-size: 18px;
+        }
+        .edit-btn { background:#003300; border:3px solid #0f0; color:#0f0; }
+        .delete-btn { background:#300; border:3px solid #f00; color:#f00; }
+        
+        /* NOUVELLES COULEURS GANGS */
+        .BALLAS { background:#800080; color:#fff; }
+        .VAGOS { background:#00ff00; color:#000; }
+        .MARABUNTA { background:#ff00ff; color:#fff; }
+        .PEAKYBLINDERS { background:#000000; color:#fff; border:2px solid #fff; }
+        .YAKUZA { background:#ff0000; color:#fff; }
+        .LOSTMC { background:#0000ff; color:#fff; }
+        .ITALIANMAFIA { background:#333333; color:#fff; }
+        .HAITIEN { background:#00ffff; color:#000; }
+        .FAMILIES { background:#ffd700; color:#000; }
+        .NARCOS { background:#ff8800; color:#000; }
     </style>
 </head>
 <body>
@@ -208,7 +219,7 @@
             <p style="margin-bottom:25px; font-size:22px;">ACCÈS RÉSERVÉ EMPLOYÉS</p>
             <input type="password" id="password-input" placeholder="MOT DE PASSE" autocomplete="off">
             <button onclick="checkPassword()">CONNEXION SÉCURISÉE</button>
-            <p style="margin-top:20px; font-size:14px; opacity:0.6;">Version 4.0 • Ne laissez aucune trace</p>
+            <p style="margin-top:20px; font-size:14px; opacity:0.6;">Version 5.1 • Interface Modification Améliorée</p>
         </div>
     </div>
 
@@ -223,9 +234,8 @@
         </div>
 
         <div class="container">
-            <!-- SIDEBAR -->
             <div class="sidebar">
-                <h2>📂 GANGS PAR COULEUR</h2>
+                <h2>📂 GANGS</h2>
                 <div id="gang-list"></div>
                 
                 <div style="margin-top:40px; border-top:2px solid #00ff41; padding-top:15px;">
@@ -242,12 +252,11 @@
                 </div>
             </div>
 
-            <!-- MAIN -->
             <div class="main">
                 <div class="card">
                     <h2>➕ NOUVEAU SUSPECT</h2>
                     <input type="text" id="nom" placeholder="NOM COMPLET DU SUSPECT">
-                    <p style="margin:10px 0 5px 0;">COULEUR DE TENUE / GANG :</p>
+                    <p style="margin:10px 0 5px 0;">GANG / AFFILIATION :</p>
                     <div id="color-select"></div>
                     <textarea id="notes" rows="3" placeholder="NOTES SUR CE QUI A ÉTÉ FAIT..."></textarea>
                     <p style="margin:10px 0 5px 0;">📸 AJOUTER PHOTO(S) :</p>
@@ -266,14 +275,33 @@
         </div>
     </div>
 
-    <!-- MODAL DÉTAIL -->
+    <!-- MODAL AMÉLIORÉ -->
     <div id="modal">
         <div class="modal-content">
             <h2 id="modal-title" style="margin-bottom:15px;"></h2>
             <div id="modal-gang" style="margin-bottom:20px;"></div>
-            
-            <div id="modal-content"></div>
-            
+
+            <!-- LISTE DES NOTES EXISTANTES -->
+            <div id="modal-notes-list"></div>
+
+            <!-- ZONE MODIFICATION AMÉLIORÉE -->
+            <div class="edit-zone">
+                <h3 id="edit-title">🔧 MODIFIER OU AJOUTER UNE NOTE</h3>
+                <p id="edit-subtitle" style="margin-bottom:10px; color:#00ff41; font-size:16px;"></p>
+                
+                <textarea id="edit-notes" rows="4" placeholder="Tapez ou modifiez la note ici..."></textarea>
+                
+                <p style="margin:12px 0 5px 0;">📸 Ajouter / compléter avec des photos :</p>
+                <input type="file" id="edit-photo-input" accept="image/*" multiple>
+                
+                <div style="display:flex; gap:12px; margin-top:15px;">
+                    <button onclick="saveEditedNote()" id="save-edit-btn" style="flex:1; background:#003300; border:3px solid #0f0; color:#0f0;">
+                        💾 ENREGISTRER LA MODIFICATION
+                    </button>
+                    <button onclick="cancelEdit()" style="flex:1;">❌ ANNULER</button>
+                </div>
+            </div>
+
             <div style="margin-top:25px; display:flex; gap:15px;">
                 <button onclick="closeModal()" style="flex:1;">FERMER DOSSIER</button>
                 <button onclick="deleteCurrentSuspect()" class="delete-btn">🗑️ SUPPRIMER CE SUSPECT</button>
@@ -282,52 +310,50 @@
     </div>
 
     <script>
-        // ====================== CONFIGURATION ======================
-        const PASSWORD = "brigadeantigang2026";   // ← CHANGE ICI ton mot de passe
+        const PASSWORD = "brigadeantigang2026";
         
         const GANGS = {
-            "ROUGE": "Bloods / Piru / affilié rouge",
-            "BLEU": "Crips / affilié bleu",
-            "VERT": "Gang vert (Latin Kings, etc.)",
-            "NOIR": "MS-13 / Black Gang",
-            "JAUNE": "Gang jaune / asiatique",
-            "BLANC": "Gang white / autre",
-            "AUTRE": "Couleur non identifiée"
+            "BALLAS": "Ballas (Purple)",
+            "VAGOS": "Vagos (Green)",
+            "MARABUNTA": "Marabunta",
+            "PEAKYBLINDERS": "Peaky Blinders",
+            "YAKUZA": "Yakuza",
+            "LOSTMC": "Lost MC",
+            "ITALIANMAFIA": "Italian Mafia",
+            "HAITIEN": "Haitien",
+            "FAMILIES": "Families",
+            "NARCOS": "Narcos"
         };
 
         let currentColor = null;
         let currentModalSuspect = null;
         let currentModalGang = null;
+        let currentEditIndex = null;   // null = nouvelle note
 
-        // ====================== LOGIN ======================
         function checkPassword() {
-            const input = document.getElementById('password-input').value.trim();
-            if (input === PASSWORD) {
+            if (document.getElementById('password-input').value.trim() === PASSWORD) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'block';
                 initApp();
             } else {
-                alert("❌ MOT DE PASSE INCORRECT - ACCÈS REFUSÉ");
+                alert("❌ MOT DE PASSE INCORRECT");
                 document.getElementById('password-input').value = '';
             }
         }
 
-        function logout() {
-            if (confirm("Déconnexion de la Brigade Anti-Gang ?")) location.reload();
-        }
+        function logout() { if (confirm("Déconnexion ?")) location.reload(); }
 
-        // ====================== APP ======================
         function initApp() {
             const container = document.getElementById('color-select');
             container.innerHTML = '';
-            Object.keys(GANGS).forEach(code => {
+            Object.keys(GANGS).forEach(gang => {
                 const btn = document.createElement('div');
-                btn.className = `gang-btn ${code}`;
-                btn.textContent = code;
+                btn.className = `gang-btn ${gang}`;
+                btn.textContent = gang;
                 btn.onclick = () => {
                     document.querySelectorAll('.gang-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    currentColor = code;
+                    currentColor = gang;
                 };
                 container.appendChild(btn);
             });
@@ -339,63 +365,60 @@
             const notes = document.getElementById('notes').value.trim();
             const files = document.getElementById('photo-input').files;
 
-            if (!nom) return alert("❌ NOM DU SUSPECT OBLIGATOIRE");
-            if (!currentColor) return alert("❌ CHOISISSEZ UNE COULEUR DE GANG");
+            if (!nom) return alert("❌ NOM OBLIGATOIRE");
+            if (!currentColor) return alert("❌ CHOISIS UN GANG");
 
-            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v4') || '{}');
+            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
             if (!dossiers[currentColor]) dossiers[currentColor] = {};
             if (!dossiers[currentColor][nom]) dossiers[currentColor][nom] = [];
 
-            const promises = Array.from(files).map(file => new Promise(resolve => {
+            const promises = Array.from(files).map(file => new Promise(r => {
                 const reader = new FileReader();
-                reader.onload = e => resolve(e.target.result);
+                reader.onload = e => r(e.target.result);
                 reader.readAsDataURL(file);
             }));
 
-            Promise.all(promises).then(base64Photos => {
-                const horodatage = new Date().toLocaleString('fr-FR');
-                
+            Promise.all(promises).then(photos => {
                 dossiers[currentColor][nom].push({
-                    date: horodatage,
+                    date: new Date().toLocaleString('fr-FR'),
                     action: notes || "(Aucune note)",
-                    photos: base64Photos
+                    photos: photos
                 });
-
-                localStorage.setItem('dossiers_gangs_crypter_v4', JSON.stringify(dossiers));
-
-                document.getElementById('nom').value = '';
-                document.getElementById('notes').value = '';
-                document.getElementById('photo-input').value = '';
-                currentColor = null;
-                document.querySelectorAll('.gang-btn').forEach(b => b.classList.remove('active'));
-
-                alert(`✅ DOSSIER CRYPTÉ → ${currentColor} / ${nom} (${base64Photos.length} photo${base64Photos.length>1?'s':''})`);
+                localStorage.setItem('dossiers_gangs_crypter_v5', JSON.stringify(dossiers));
+                resetForm();
+                alert(`✅ DOSSIER AJOUTÉ → ${currentColor} / ${nom}`);
                 rafraichirListe();
             });
         }
 
+        function resetForm() {
+            document.getElementById('nom').value = '';
+            document.getElementById('notes').value = '';
+            document.getElementById('photo-input').value = '';
+            currentColor = null;
+            document.querySelectorAll('.gang-btn').forEach(b => b.classList.remove('active'));
+        }
+
         function rafraichirListe() {
             const container = document.getElementById('liste-dossiers');
-            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v4') || '{}');
+            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
             let html = '';
 
             if (Object.keys(dossiers).length === 0) {
                 html = 'Aucun dossier pour l’instant…';
             } else {
                 Object.keys(dossiers).sort().forEach(gang => {
-                    html += `🟥 GANG ${gang} (${GANGS[gang] || 'Inconnu'})\n`;
+                    html += `🟥 ${gang} (${GANGS[gang]})\n`;
                     html += '─'.repeat(70) + '\n';
-                    
                     Object.keys(dossiers[gang]).forEach(nom => {
                         const entries = dossiers[gang][nom];
                         const last = entries[entries.length-1];
                         const photoCount = last.photos ? last.photos.length : 0;
-                        
                         html += `👤 ${nom} `;
                         if (photoCount > 0) html += `📸 (${photoCount} photo${photoCount>1?'s':''})\n`;
                         else html += '\n';
                         html += `   Dernière action → ${last.action.substring(0,55)}${last.action.length>55?'...':''}\n`;
-                        html += `   Cliquez pour ouvrir le dossier complet\n\n`;
+                        html += `   Cliquez pour ouvrir / modifier\n\n`;
                     });
                 });
             }
@@ -406,10 +429,8 @@
             const text = e.target.textContent;
             const match = text.match(/👤\s+([^\n]+)/);
             if (!match) return;
-            
             const nom = match[1].trim();
-            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v4') || '{}');
-            
+            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
             for (let gang in dossiers) {
                 if (dossiers[gang][nom]) {
                     currentModalSuspect = nom;
@@ -421,15 +442,20 @@
         }
 
         function openModal(nom, gang, entries) {
-            const modal = document.getElementById('modal');
+            currentModalSuspect = nom;
+            currentModalGang = gang;
+            currentEditIndex = null;
+
             document.getElementById('modal-title').innerHTML = `👤 ${nom}`;
-            document.getElementById('modal-gang').innerHTML = `<span class="${gang}">${gang}</span> — ${GANGS[gang] || ''}`;
+            document.getElementById('modal-gang').innerHTML = `<span class="${gang}">${gang}</span> — ${GANGS[gang]}`;
+
+            let html = `<h3 style="margin-bottom:15px;">📋 NOTES DU SUSPECT (${entries.length})</h3>`;
             
-            let html = '';
             entries.forEach((entry, index) => {
-                html += `<div class="note" style="margin-bottom:25px;">`;
-                html += `<strong>[${entry.date}]</strong><br>`;
-                html += `${entry.action}<br>`;
+                html += `
+                <div class="note-entry">
+                    <strong>[${entry.date}]</strong><br>
+                    ${entry.action}<br>`;
                 if (entry.photos && entry.photos.length) {
                     html += `<div class="photo-grid">`;
                     entry.photos.forEach(src => {
@@ -437,99 +463,150 @@
                     });
                     html += `</div>`;
                 }
-                html += `</div>`;
+                html += `
+                    <button onclick="startEdit(${index})" class="edit-btn" style="margin-top:12px; width:auto;">✏️ MODIFIER CETTE NOTE</button>
+                </div>`;
             });
+
+            document.getElementById('modal-notes-list').innerHTML = html;
+            resetEditZone();
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function resetEditZone() {
+            currentEditIndex = null;
+            document.getElementById('edit-notes').value = '';
+            document.getElementById('edit-photo-input').value = '';
+            document.getElementById('edit-title').textContent = '➕ AJOUTER UNE NOUVELLE NOTE';
+            document.getElementById('edit-subtitle').innerHTML = 'Cette note sera ajoutée en bas du dossier';
+            document.getElementById('save-edit-btn').innerHTML = '💾 AJOUTER LA NOTE';
+        }
+
+        function startEdit(index) {
+            currentEditIndex = index;
+            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
+            const entry = dossiers[currentModalGang][currentModalSuspect][index];
             
-            document.getElementById('modal-content').innerHTML = html;
-            modal.style.display = 'flex';
+            document.getElementById('edit-notes').value = entry.action;
+            document.getElementById('edit-title').textContent = '✏️ MODIFIER LA NOTE';
+            document.getElementById('edit-subtitle').innerHTML = `Modification de la note du <strong>${entry.date}</strong>`;
+            document.getElementById('save-edit-btn').innerHTML = '💾 ENREGISTRER LES MODIFICATIONS';
+        }
+
+        function saveEditedNote() {
+            const newText = document.getElementById('edit-notes').value.trim();
+            const files = document.getElementById('edit-photo-input').files;
+            
+            if (!newText) return alert("❌ La note ne peut pas être vide");
+
+            const promises = Array.from(files).map(file => new Promise(r => {
+                const reader = new FileReader();
+                reader.onload = e => r(e.target.result);
+                reader.readAsDataURL(file);
+            }));
+
+            Promise.all(promises).then(newPhotos => {
+                let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
+                
+                if (currentEditIndex === null) {
+                    // Ajout nouvelle note
+                    dossiers[currentModalGang][currentModalSuspect].push({
+                        date: new Date().toLocaleString('fr-FR'),
+                        action: newText,
+                        photos: newPhotos
+                    });
+                } else {
+                    // Modification existante
+                    const entry = dossiers[currentModalGang][currentModalSuspect][currentEditIndex];
+                    entry.action = newText;
+                    if (newPhotos.length > 0) {
+                        entry.photos = [...(entry.photos || []), ...newPhotos];
+                    }
+                }
+
+                localStorage.setItem('dossiers_gangs_crypter_v5', JSON.stringify(dossiers));
+                openModal(currentModalSuspect, currentModalGang, dossiers[currentModalGang][currentModalSuspect]); // refresh modal
+                rafraichirListe();
+            });
+        }
+
+        function cancelEdit() {
+            resetEditZone();
         }
 
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
             currentModalSuspect = null;
             currentModalGang = null;
+            currentEditIndex = null;
         }
 
         function deleteCurrentSuspect() {
-            if (!currentModalSuspect || !confirm("❌ SUPPRIMER DÉFINITIVEMENT ce suspect et toutes ses notes/photos ?")) return;
-            
-            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v4') || '{}');
-            if (dossiers[currentModalGang] && dossiers[currentModalGang][currentModalSuspect]) {
+            if (confirm("Supprimer définitivement ce suspect et toutes ses notes ?")) {
+                let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
                 delete dossiers[currentModalGang][currentModalSuspect];
                 if (Object.keys(dossiers[currentModalGang]).length === 0) delete dossiers[currentModalGang];
-                localStorage.setItem('dossiers_gangs_crypter_v4', JSON.stringify(dossiers));
+                localStorage.setItem('dossiers_gangs_crypter_v5', JSON.stringify(dossiers));
+                closeModal();
+                rafraichirListe();
             }
-            closeModal();
-            rafraichirListe();
-            alert("🗑️ Suspect supprimé de la base cryptée.");
         }
 
         function exportTXT() {
-            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v4') || '{}');
-            let txt = "CRYPTER • BRIGADE ANTI-GANG - EXPORT TXT\n";
-            txt += "Date d'export : " + new Date().toLocaleString('fr-FR') + "\n\n";
-            
-            Object.keys(dossiers).sort().forEach(gang => {
-                txt += `=== GANG ${gang} ===\n`;
-                Object.keys(dossiers[gang]).forEach(nom => {
-                    txt += `\n👤 ${nom}\n`;
-                    dossiers[gang][nom].forEach(entry => {
-                        txt += `[${entry.date}] ${entry.action}\n`;
-                        if (entry.photos && entry.photos.length) txt += `   📸 ${entry.photos.length} photo(s)\n`;
+            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
+            let txt = "CRYPTER • EXPORT TXT - " + new Date().toLocaleString('fr-FR') + "\n\n";
+            Object.keys(dossiers).sort().forEach(g => {
+                txt += `=== ${g} ===\n`;
+                Object.keys(dossiers[g]).forEach(n => {
+                    txt += `\n👤 ${n}\n`;
+                    dossiers[g][n].forEach(e => {
+                        txt += `[${e.date}] ${e.action}\n`;
+                        if (e.photos && e.photos.length) txt += `📸 ${e.photos.length} photo(s)\n`;
                     });
                 });
-                txt += "\n";
             });
-            
-            const blob = new Blob([txt], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
+            const blob = new Blob([txt], {type:'text/plain'});
             const a = document.createElement('a');
-            a.href = url;
-            a.download = `CRYPTER_EXPORT_${new Date().toISOString().slice(0,10)}.txt`;
+            a.href = URL.createObjectURL(blob);
+            a.download = `CRYPTER_${new Date().toISOString().slice(0,10)}.txt`;
             a.click();
         }
 
         function exportJSON() {
-            let dossiers = localStorage.getItem('dossiers_gangs_crypter_v4') || '{}';
-            const blob = new Blob([dossiers], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
+            const data = localStorage.getItem('dossiers_gangs_crypter_v5') || '{}';
+            const blob = new Blob([data], {type:'application/json'});
             const a = document.createElement('a');
-            a.href = url;
+            a.href = URL.createObjectURL(blob);
             a.download = `CRYPTER_BACKUP_${new Date().toISOString().slice(0,10)}.json`;
             a.click();
         }
 
         function clearAllData() {
-            if (!confirm("⚠️ SUPPRIMER TOUTE LA BASE ?\nCette action est irréversible !")) return;
-            if (!confirm("DERNIÈRE CONFIRMATION : tout va être effacé ?")) return;
-            
-            localStorage.removeItem('dossiers_gangs_crypter_v4');
-            alert("🗑️ BASE COMPLÈTEMENT SUPPRIMÉE");
-            rafraichirListe();
+            if (confirm("⚠️ SUPPRIMER TOUTE LA BASE ?") && confirm("DERNIÈRE CONFIRMATION")) {
+                localStorage.removeItem('dossiers_gangs_crypter_v5');
+                rafraichirListe();
+            }
         }
 
         function searchSuspect() {
             const term = document.getElementById('search').value.trim().toUpperCase();
             if (!term) return rafraichirListe();
-            
-            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v4') || '{}');
+            let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
             let html = `RECHERCHE : "${term}"\n\n`;
             let found = false;
-            
-            Object.keys(dossiers).forEach(gang => {
-                Object.keys(dossiers[gang]).forEach(nom => {
-                    if (nom.includes(term)) {
+            Object.keys(dossiers).forEach(g => {
+                Object.keys(dossiers[g]).forEach(n => {
+                    if (n.includes(term)) {
                         found = true;
-                        html += `🟥 ${gang} → ${nom}\n`;
-                        dossiers[gang][nom].forEach(entry => {
-                            html += `   [${entry.date}] → ${entry.action}\n`;
-                            if (entry.photos && entry.photos.length) html += `   📸 ${entry.photos.length} photo(s)\n`;
+                        html += `🟥 ${g} → ${n}\n`;
+                        dossiers[g][n].forEach(e => {
+                            html += `   [${e.date}] → ${e.action}\n`;
+                            if (e.photos && e.photos.length) html += `   📸 ${e.photos.length} photo(s)\n`;
                         });
                         html += '\n';
                     }
                 });
             });
-            
             if (!found) html += 'Aucun résultat.';
             document.getElementById('liste-dossiers').innerHTML = `<pre>${html}</pre>`;
         }
