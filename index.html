@@ -34,6 +34,51 @@
         }
         @keyframes scan { 0%{background-position:0 0} 100%{background-position:0 100%} }
         
+        /* NOTIFICATIONS SYSTÈME */
+        #notification-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 30000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 380px;
+        }
+        .notification {
+            background: #111;
+            border: 3px solid var(--green);
+            color: var(--green);
+            padding: 15px 20px;
+            box-shadow: 0 0 25px var(--green);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: notifyPop 0.4s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .notification.success { border-color: #00ff41; }
+        .notification.error { border-color: #ff0000; color: #ff0000; }
+        .notification.info { border-color: #00ccff; color: #00ccff; }
+        
+        @keyframes notifyPop {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .notification .icon {
+            font-size: 24px;
+        }
+        .notification .text {
+            flex: 1;
+            font-size: 18px;
+        }
+        .notification .close {
+            cursor: pointer;
+            font-size: 22px;
+            opacity: 0.6;
+        }
+        
         /* LOGIN */
         #login-screen {
             position: fixed; top: 0; left: 0;
@@ -74,129 +119,37 @@
         }
         button:hover { background: var(--green); color: #000; }
 
-        /* MAIN */
-        .header {
-            background: #111;
-            border-bottom: 3px solid var(--green);
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 0 20px var(--green);
-        }
+        /* RESTE DU DESIGN (identique à la version précédente) */
+        .header { background: #111; border-bottom: 3px solid var(--green); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 0 20px var(--green); }
         .header h1 { font-size: 32px; letter-spacing: 4px; text-shadow: 0 0 10px var(--green); }
         .status { font-size: 16px; color: var(--green); display: flex; align-items: center; gap: 10px; }
-        .status::before {
-            content: '';
-            display: inline-block;
-            width: 12px; height: 12px;
-            background: var(--green);
-            border-radius: 50%;
-            animation: blink 1s infinite;
-        }
-        .logout-btn {
-            background: #300; border: 2px solid #f00; color: #f00; padding: 8px 20px; font-size: 16px;
-        }
+        .status::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--green); border-radius: 50%; animation: blink 1s infinite; }
+        .logout-btn { background: #300; border: 2px solid #f00; color: #f00; padding: 8px 20px; font-size: 16px; }
         .container { display: flex; height: calc(100vh - 80px); }
         .sidebar { width: 280px; background: #111; border-right: 3px solid var(--green); padding: 20px; overflow-y: auto; }
         .main { flex: 1; padding: 30px; overflow-y: auto; }
-        .card {
-            background: #111;
-            border: 2px solid var(--green);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px var(--green);
-        }
-        input, textarea, button {
-            font-family: 'VT323', monospace;
-            font-size: 18px;
-            background: #000;
-            border: 2px solid var(--green);
-            color: var(--green);
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 15px;
-        }
+        .card { background: #111; border: 2px solid var(--green); padding: 20px; margin-bottom: 20px; box-shadow: 0 0 15px var(--green); }
+        input, textarea, button { font-family: 'VT323', monospace; font-size: 18px; background: #000; border: 2px solid var(--green); color: var(--green); padding: 10px; width: 100%; margin-bottom: 15px; }
         button { cursor: pointer; transition: all .2s; }
         button:hover { background: var(--green); color: #000; box-shadow: 0 0 20px var(--green); }
         
-        .gang-btn {
-            display: inline-block;
-            padding: 8px 15px;
-            margin: 5px;
-            border: 2px solid var(--green);
-            background: #111;
-            cursor: pointer;
-        }
+        .gang-btn { display: inline-block; padding: 8px 15px; margin: 5px; border: 2px solid var(--green); background: #111; cursor: pointer; }
         .gang-btn.active { background: var(--green); color: #000; }
         
-        .terminal {
-            background: #000;
-            border: 2px solid var(--green);
-            padding: 15px;
-            height: 420px;
-            overflow-y: auto;
-            font-size: 16px;
-            line-height: 1.4;
-            white-space: pre-wrap;
-        }
+        .terminal { background: #000; border: 2px solid var(--green); padding: 15px; height: 420px; overflow-y: auto; font-size: 16px; line-height: 1.4; white-space: pre-wrap; }
         
-        /* MODAL AMÉLIORÉ */
-        #modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 20000;
-        }
-        .modal-content {
-            background: #111;
-            border: 4px solid var(--green);
-            width: 92%;
-            max-width: 950px;
-            max-height: 94vh;
-            overflow-y: auto;
-            padding: 25px;
-        }
-        .photo-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .photo-grid img {
-            max-width: 220px;
-            max-height: 220px;
-            border: 2px solid var(--green);
-            cursor: pointer;
-        }
+        #modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 20000; }
+        .modal-content { background: #111; border: 4px solid var(--green); width: 92%; max-width: 950px; max-height: 94vh; overflow-y: auto; padding: 25px; }
+        .photo-grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .photo-grid img { max-width: 220px; max-height: 220px; border: 2px solid var(--green); cursor: pointer; }
         
-        .note-entry {
-            background: #0a0a0a;
-            border: 2px solid #222;
-            padding: 18px;
-            margin-bottom: 20px;
-            border-radius: 0;
-        }
+        .note-entry { background: #0a0a0a; border: 2px solid #222; padding: 18px; margin-bottom: 20px; }
+        .edit-zone { background: #111; border: 3px solid #00ff41; padding: 20px; margin-top: 30px; }
         
-        .edit-zone {
-            background: #111;
-            border: 3px solid #00ff41;
-            padding: 20px;
-            margin-top: 30px;
-        }
-        
-        .edit-btn, .delete-btn, .export-btn {
-            padding: 8px 20px;
-            font-size: 18px;
-        }
+        .edit-btn, .delete-btn, .export-btn { padding: 8px 20px; font-size: 18px; }
         .edit-btn { background:#003300; border:3px solid #0f0; color:#0f0; }
         .delete-btn { background:#300; border:3px solid #f00; color:#f00; }
         
-        /* NOUVELLES COULEURS GANGS */
         .BALLAS { background:#800080; color:#fff; }
         .VAGOS { background:#00ff00; color:#000; }
         .MARABUNTA { background:#ff00ff; color:#fff; }
@@ -212,6 +165,9 @@
 <body>
     <div class="scanline"></div>
 
+    <!-- NOTIFICATION CONTAINER -->
+    <div id="notification-container"></div>
+
     <!-- LOGIN -->
     <div id="login-screen">
         <div class="login-box">
@@ -219,11 +175,11 @@
             <p style="margin-bottom:25px; font-size:22px;">ACCÈS RÉSERVÉ EMPLOYÉS</p>
             <input type="password" id="password-input" placeholder="MOT DE PASSE" autocomplete="off">
             <button onclick="checkPassword()">CONNEXION SÉCURISÉE</button>
-            <p style="margin-top:20px; font-size:14px; opacity:0.6;">Version 5.1 • Interface Modification Améliorée</p>
+            <p style="margin-top:20px; font-size:14px; opacity:0.6;">Version 5.2 • Notifications Système Ajoutées</p>
         </div>
     </div>
 
-    <!-- MAIN APP -->
+    <!-- MAIN APP (identique) -->
     <div id="main-app" style="display:none;">
         <div class="header">
             <h1>CRYPTER • DOSSIERS GANGS</h1>
@@ -275,29 +231,21 @@
         </div>
     </div>
 
-    <!-- MODAL AMÉLIORÉ -->
+    <!-- MODAL (identique à la version précédente) -->
     <div id="modal">
         <div class="modal-content">
             <h2 id="modal-title" style="margin-bottom:15px;"></h2>
             <div id="modal-gang" style="margin-bottom:20px;"></div>
-
-            <!-- LISTE DES NOTES EXISTANTES -->
             <div id="modal-notes-list"></div>
 
-            <!-- ZONE MODIFICATION AMÉLIORÉE -->
             <div class="edit-zone">
                 <h3 id="edit-title">🔧 MODIFIER OU AJOUTER UNE NOTE</h3>
                 <p id="edit-subtitle" style="margin-bottom:10px; color:#00ff41; font-size:16px;"></p>
-                
                 <textarea id="edit-notes" rows="4" placeholder="Tapez ou modifiez la note ici..."></textarea>
-                
                 <p style="margin:12px 0 5px 0;">📸 Ajouter / compléter avec des photos :</p>
                 <input type="file" id="edit-photo-input" accept="image/*" multiple>
-                
                 <div style="display:flex; gap:12px; margin-top:15px;">
-                    <button onclick="saveEditedNote()" id="save-edit-btn" style="flex:1; background:#003300; border:3px solid #0f0; color:#0f0;">
-                        💾 ENREGISTRER LA MODIFICATION
-                    </button>
+                    <button onclick="saveEditedNote()" id="save-edit-btn" style="flex:1; background:#003300; border:3px solid #0f0; color:#0f0;">💾 ENREGISTRER LA MODIFICATION</button>
                     <button onclick="cancelEdit()" style="flex:1;">❌ ANNULER</button>
                 </div>
             </div>
@@ -328,20 +276,51 @@
         let currentColor = null;
         let currentModalSuspect = null;
         let currentModalGang = null;
-        let currentEditIndex = null;   // null = nouvelle note
+        let currentEditIndex = null;
 
+        // ====================== NOTIFICATIONS SYSTÈME ======================
+        function showNotification(message, type = "success") {
+            const container = document.getElementById('notification-container');
+            
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            
+            let icon = '';
+            if (type === "success") icon = '✅';
+            else if (type === "error") icon = '❌';
+            else if (type === "info") icon = 'ℹ️';
+            
+            notif.innerHTML = `
+                <span class="icon">${icon}</span>
+                <span class="text">${message}</span>
+                <span class="close" onclick="this.parentElement.remove()">✕</span>
+            `;
+            
+            container.appendChild(notif);
+            
+            // Auto-suppression après 4 secondes
+            setTimeout(() => {
+                if (notif.parentElement) notif.style.opacity = '0';
+                setTimeout(() => notif.remove(), 400);
+            }, 4000);
+        }
+
+        // ====================== LOGIN & APP ======================
         function checkPassword() {
             if (document.getElementById('password-input').value.trim() === PASSWORD) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'block';
                 initApp();
+                showNotification("CONNEXION RÉUSSIE - BIENVENUE DANS LE SYSTÈME CRYPTER", "success");
             } else {
-                alert("❌ MOT DE PASSE INCORRECT");
+                showNotification("❌ MOT DE PASSE INCORRECT - ACCÈS REFUSÉ", "error");
                 document.getElementById('password-input').value = '';
             }
         }
 
-        function logout() { if (confirm("Déconnexion ?")) location.reload(); }
+        function logout() {
+            if (confirm("Déconnexion de la Brigade Anti-Gang ?")) location.reload();
+        }
 
         function initApp() {
             const container = document.getElementById('color-select');
@@ -365,8 +344,8 @@
             const notes = document.getElementById('notes').value.trim();
             const files = document.getElementById('photo-input').files;
 
-            if (!nom) return alert("❌ NOM OBLIGATOIRE");
-            if (!currentColor) return alert("❌ CHOISIS UN GANG");
+            if (!nom) return showNotification("❌ NOM DU SUSPECT OBLIGATOIRE", "error");
+            if (!currentColor) return showNotification("❌ CHOISIS UN GANG", "error");
 
             let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
             if (!dossiers[currentColor]) dossiers[currentColor] = {};
@@ -386,10 +365,12 @@
                 });
                 localStorage.setItem('dossiers_gangs_crypter_v5', JSON.stringify(dossiers));
                 resetForm();
-                alert(`✅ DOSSIER AJOUTÉ → ${currentColor} / ${nom}`);
+                showNotification(`✅ DOSSIER CRÉÉ → ${currentColor} / ${nom}`, "success");
                 rafraichirListe();
             });
         }
+
+        // ... (le reste du code JS est identique à la version 5.1, seules les alert() ont été remplacées par showNotification)
 
         function resetForm() {
             document.getElementById('nom').value = '';
@@ -402,26 +383,22 @@
         function rafraichirListe() {
             const container = document.getElementById('liste-dossiers');
             let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
-            let html = '';
-
-            if (Object.keys(dossiers).length === 0) {
-                html = 'Aucun dossier pour l’instant…';
-            } else {
-                Object.keys(dossiers).sort().forEach(gang => {
-                    html += `🟥 ${gang} (${GANGS[gang]})\n`;
-                    html += '─'.repeat(70) + '\n';
-                    Object.keys(dossiers[gang]).forEach(nom => {
-                        const entries = dossiers[gang][nom];
-                        const last = entries[entries.length-1];
-                        const photoCount = last.photos ? last.photos.length : 0;
-                        html += `👤 ${nom} `;
-                        if (photoCount > 0) html += `📸 (${photoCount} photo${photoCount>1?'s':''})\n`;
-                        else html += '\n';
-                        html += `   Dernière action → ${last.action.substring(0,55)}${last.action.length>55?'...':''}\n`;
-                        html += `   Cliquez pour ouvrir / modifier\n\n`;
-                    });
+            let html = Object.keys(dossiers).length === 0 ? 'Aucun dossier pour l’instant…' : '';
+            // (code identique à avant)
+            Object.keys(dossiers).sort().forEach(gang => {
+                html += `🟥 ${gang} (${GANGS[gang]})\n`;
+                html += '─'.repeat(70) + '\n';
+                Object.keys(dossiers[gang]).forEach(nom => {
+                    const entries = dossiers[gang][nom];
+                    const last = entries[entries.length-1];
+                    const photoCount = last.photos ? last.photos.length : 0;
+                    html += `👤 ${nom} `;
+                    if (photoCount > 0) html += `📸 (${photoCount} photo${photoCount>1?'s':''})\n`;
+                    else html += '\n';
+                    html += `   Dernière action → ${last.action.substring(0,55)}${last.action.length>55?'...':''}\n`;
+                    html += `   Cliquez pour ouvrir / modifier\n\n`;
                 });
-            }
+            });
             container.innerHTML = `<pre onclick="handleTerminalClick(event)" style="cursor:pointer">${html}</pre>`;
         }
 
@@ -445,29 +422,19 @@
             currentModalSuspect = nom;
             currentModalGang = gang;
             currentEditIndex = null;
-
             document.getElementById('modal-title').innerHTML = `👤 ${nom}`;
             document.getElementById('modal-gang').innerHTML = `<span class="${gang}">${gang}</span> — ${GANGS[gang]}`;
 
             let html = `<h3 style="margin-bottom:15px;">📋 NOTES DU SUSPECT (${entries.length})</h3>`;
-            
             entries.forEach((entry, index) => {
-                html += `
-                <div class="note-entry">
-                    <strong>[${entry.date}]</strong><br>
-                    ${entry.action}<br>`;
+                html += `<div class="note-entry"><strong>[${entry.date}]</strong><br>${entry.action}<br>`;
                 if (entry.photos && entry.photos.length) {
                     html += `<div class="photo-grid">`;
-                    entry.photos.forEach(src => {
-                        html += `<img src="${src}" onclick="this.style.maxWidth='90vw';this.style.maxHeight='90vh'">`;
-                    });
+                    entry.photos.forEach(src => html += `<img src="${src}" onclick="this.style.maxWidth='90vw';this.style.maxHeight='90vh'">`);
                     html += `</div>`;
                 }
-                html += `
-                    <button onclick="startEdit(${index})" class="edit-btn" style="margin-top:12px; width:auto;">✏️ MODIFIER CETTE NOTE</button>
-                </div>`;
+                html += `<button onclick="startEdit(${index})" class="edit-btn" style="margin-top:12px; width:auto;">✏️ MODIFIER CETTE NOTE</button></div>`;
             });
-
             document.getElementById('modal-notes-list').innerHTML = html;
             resetEditZone();
             document.getElementById('modal').style.display = 'flex';
@@ -486,7 +453,6 @@
             currentEditIndex = index;
             let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
             const entry = dossiers[currentModalGang][currentModalSuspect][index];
-            
             document.getElementById('edit-notes').value = entry.action;
             document.getElementById('edit-title').textContent = '✏️ MODIFIER LA NOTE';
             document.getElementById('edit-subtitle').innerHTML = `Modification de la note du <strong>${entry.date}</strong>`;
@@ -496,8 +462,7 @@
         function saveEditedNote() {
             const newText = document.getElementById('edit-notes').value.trim();
             const files = document.getElementById('edit-photo-input').files;
-            
-            if (!newText) return alert("❌ La note ne peut pas être vide");
+            if (!newText) return showNotification("❌ La note ne peut pas être vide", "error");
 
             const promises = Array.from(files).map(file => new Promise(r => {
                 const reader = new FileReader();
@@ -507,32 +472,26 @@
 
             Promise.all(promises).then(newPhotos => {
                 let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
-                
                 if (currentEditIndex === null) {
-                    // Ajout nouvelle note
                     dossiers[currentModalGang][currentModalSuspect].push({
                         date: new Date().toLocaleString('fr-FR'),
                         action: newText,
                         photos: newPhotos
                     });
+                    showNotification("✅ Nouvelle note ajoutée au dossier", "success");
                 } else {
-                    // Modification existante
                     const entry = dossiers[currentModalGang][currentModalSuspect][currentEditIndex];
                     entry.action = newText;
-                    if (newPhotos.length > 0) {
-                        entry.photos = [...(entry.photos || []), ...newPhotos];
-                    }
+                    if (newPhotos.length > 0) entry.photos = [...(entry.photos || []), ...newPhotos];
+                    showNotification("✅ Note modifiée avec succès", "success");
                 }
-
                 localStorage.setItem('dossiers_gangs_crypter_v5', JSON.stringify(dossiers));
-                openModal(currentModalSuspect, currentModalGang, dossiers[currentModalGang][currentModalSuspect]); // refresh modal
+                openModal(currentModalSuspect, currentModalGang, dossiers[currentModalGang][currentModalSuspect]);
                 rafraichirListe();
             });
         }
 
-        function cancelEdit() {
-            resetEditZone();
-        }
+        function cancelEdit() { resetEditZone(); }
 
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
@@ -549,10 +508,12 @@
                 localStorage.setItem('dossiers_gangs_crypter_v5', JSON.stringify(dossiers));
                 closeModal();
                 rafraichirListe();
+                showNotification("🗑️ Suspect supprimé de la base cryptée", "info");
             }
         }
 
         function exportTXT() {
+            // (code identique)
             let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
             let txt = "CRYPTER • EXPORT TXT - " + new Date().toLocaleString('fr-FR') + "\n\n";
             Object.keys(dossiers).sort().forEach(g => {
@@ -570,6 +531,7 @@
             a.href = URL.createObjectURL(blob);
             a.download = `CRYPTER_${new Date().toISOString().slice(0,10)}.txt`;
             a.click();
+            showNotification("📤 Export TXT terminé", "success");
         }
 
         function exportJSON() {
@@ -579,16 +541,19 @@
             a.href = URL.createObjectURL(blob);
             a.download = `CRYPTER_BACKUP_${new Date().toISOString().slice(0,10)}.json`;
             a.click();
+            showNotification("📤 Export JSON terminé", "success");
         }
 
         function clearAllData() {
             if (confirm("⚠️ SUPPRIMER TOUTE LA BASE ?") && confirm("DERNIÈRE CONFIRMATION")) {
                 localStorage.removeItem('dossiers_gangs_crypter_v5');
                 rafraichirListe();
+                showNotification("🗑️ BASE COMPLÈTEMENT SUPPRIMÉE", "info");
             }
         }
 
         function searchSuspect() {
+            // (code identique)
             const term = document.getElementById('search').value.trim().toUpperCase();
             if (!term) return rafraichirListe();
             let dossiers = JSON.parse(localStorage.getItem('dossiers_gangs_crypter_v5') || '{}');
